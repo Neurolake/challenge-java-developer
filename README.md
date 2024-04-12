@@ -1,8 +1,10 @@
 # Avaliação para admissão de Desenvolvedores para a Neurotech
 
-## Objetivo
+## Instruções
 
-Este documento tem como objetivo descrever um projeto Java, a ser realizado em um período máximo de 3 dias, para ser utilizado como critério de avaliação técnica para admissão de novos desenvolvedores aqui para a Neurotech.
+- Realize o fork deste projeto para desenvolver a sua solução. Não serão aceitos commits diretamente para este repositório;
+- Após o desenvolvimento da sua solução, nos avise, enviando o link do seu projeto para que iniciemos a avaliação. **Não crie Pull Requests!**
+- A solução deve ser entregue em um prazo máximo de 3 dias. 
 
 ## Descrição
 
@@ -33,3 +35,5 @@ De maneira obrigatória, os seguintes endpoints devem ser implementados:
     
 
 Como adicional, mas não obrigatório, implemente um endpoint para se determinar todos os clientes entre 23 e 49 anos que possuem Crédito com juros fixos e estão aptos a adquirirem crédito automotivo para veículos do tipo Hatch. O objeto de retorno deve conter uma lista com o nome e a renda de cada um destes clientes.
+
+Boa sorte!
