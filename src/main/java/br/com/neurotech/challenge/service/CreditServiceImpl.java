@@ -4,8 +4,8 @@ import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
 import org.springframework.stereotype.Service;
 
-import static br.com.neurotech.challenge.constant.CreditConstants.HATCH_MAX_INCOME;
-import static br.com.neurotech.challenge.constant.CreditConstants.HATCH_MIN_INCOME;
+import static br.com.neurotech.challenge.constant.CreditConstants.JUROS_VARIAVEIS_MAX_INCOME;
+import static br.com.neurotech.challenge.constant.CreditConstants.JUROS_VARIAVEIS_MIN_INCOME;
 import static br.com.neurotech.challenge.constant.CreditConstants.SUV_AGE_OLDER;
 import static br.com.neurotech.challenge.constant.CreditConstants.SUV_INCOME_GREATER;
 
@@ -34,7 +34,7 @@ public class CreditServiceImpl implements CreditService {
 
         double income = neurotechClient.getIncome();
 
-        return income >= HATCH_MIN_INCOME && income <= HATCH_MAX_INCOME;
+        return income >= JUROS_VARIAVEIS_MIN_INCOME && income <= JUROS_VARIAVEIS_MAX_INCOME;
     }
 
     private boolean checkSUVCredit(NeurotechClient neurotechClient) {
