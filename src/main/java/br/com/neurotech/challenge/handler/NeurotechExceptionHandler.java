@@ -2,6 +2,7 @@ package br.com.neurotech.challenge.handler;
 
 import br.com.neurotech.challenge.exception.EntityNotFoundException;
 import br.com.neurotech.challenge.exception.DuplicatedClientException;
+import br.com.neurotech.challenge.exception.OperationUnsupportedException;
 import br.com.neurotech.challenge.handler.model.ExceptionHandlerMessage;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,21 @@ public class NeurotechExceptionHandler extends ResponseEntityExceptionHandler {
             DuplicatedClientException ex, WebRequest request) {
 
         HttpStatus status = HttpStatus.CONFLICT;
+
+        return super.handleExceptionInternal(ex,
+                new ExceptionHandlerMessage(
+                        status.value(),
+                        ex.getMessage(),
+                        LocalDateTime.now()
+                ),
+                new HttpHeaders(), status, request
+        );
+    }
+
+    @ExceptionHandler(OperationUnsupportedException.class)
+    public ResponseEntity<Object> handleOperationUnsupportedFoundException(
+            OperationUnsupportedException ex, WebRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         return super.handleExceptionInternal(ex,
                 new ExceptionHandlerMessage(
