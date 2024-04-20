@@ -2,9 +2,11 @@ package br.com.neurotech.challenge.service;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.exception.ClientNotFoundException;
+import br.com.neurotech.challenge.exception.DuplicatedClientException;
 import br.com.neurotech.challenge.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,6 +20,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public String save(NeurotechClient client) {
+
+        Optional<NeurotechClient> existingClient = clientRepository.findByName(client.getName());
+
+        if (existingClient.isPresent()) {
+            throw new DuplicatedClientException(
+                    String.format("Client with name=%s already exists", client.getName())
+            );
+        }
 
         NeurotechClient saved = clientRepository.save(client);
 
