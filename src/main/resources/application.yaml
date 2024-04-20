@@ -2,5 +2,16 @@ spring:
   application:
     name: challenge-java-developer
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/neurotech
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
 server:
   port: 5000
