@@ -1,6 +1,6 @@
 package br.com.neurotech.challenge.handler;
 
-import br.com.neurotech.challenge.exception.ClientNotFoundException;
+import br.com.neurotech.challenge.exception.EntityNotFoundException;
 import br.com.neurotech.challenge.exception.DuplicatedClientException;
 import br.com.neurotech.challenge.handler.model.ExceptionHandlerMessage;
 import org.springframework.http.HttpHeaders;
@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class NeurotechExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ClientNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleClientNotFoundException(
-            ClientNotFoundException ex, WebRequest request) {
+            EntityNotFoundException ex, WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         return super.handleExceptionInternal(ex,
