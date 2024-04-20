@@ -8,6 +8,7 @@ import br.com.neurotech.challenge.exception.OperationUnsupportedException;
 import br.com.neurotech.challenge.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,6 +48,11 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Client not found for id=%s", id)));
     }
 
+    @Override
+    public List<NeurotechClient> findByAgeBetweenAndCreditType(Integer ageMin, Integer ageMax, CreditType creditType){
+        return clientRepository.findByAgeBetweenAndCreditType(ageMin, ageMax, creditType);
+    }
+
     private CreditType setCreditType(Integer age, Double income) {
 
         if (age > 65)
@@ -56,7 +62,7 @@ public class ClientServiceImpl implements ClientService {
             return CreditType.JUROS_VARIAVEIS;
 
         if(age <=25){
-            return CreditType.JUROS_SIMPLES;
+            return CreditType.JUROS_FIXOS;
         }
 
         throw new OperationUnsupportedException("It is not possible to determine a credit type for this client");
