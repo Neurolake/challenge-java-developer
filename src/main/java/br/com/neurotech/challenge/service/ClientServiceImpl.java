@@ -1,7 +1,7 @@
 package br.com.neurotech.challenge.service;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
-import br.com.neurotech.challenge.exception.ClientNotFoundException;
+import br.com.neurotech.challenge.exception.EntityNotFoundException;
 import br.com.neurotech.challenge.exception.DuplicatedClientException;
 import br.com.neurotech.challenge.repository.ClientRepository;
 import org.springframework.stereotype.Service;
@@ -35,9 +35,9 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public NeurotechClient get(String id) throws ClientNotFoundException {
+    public NeurotechClient get(String id) throws EntityNotFoundException {
 
         return clientRepository.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ClientNotFoundException(String.format("Client not found for id=%s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Client not found for id=%s", id)));
     }
 }
