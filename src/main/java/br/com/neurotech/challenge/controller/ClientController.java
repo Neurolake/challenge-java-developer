@@ -9,6 +9,13 @@ import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.exception.EntityNotFoundException;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +29,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/client")
+@Tag(name = "Neurotech Client", description = "Neurotech Client management APIs")
 public class ClientController {
 
     @Autowired
@@ -32,6 +40,11 @@ public class ClientController {
 
 
     @PostMapping("/")
+    @Operation(
+            summary = "Creates a new NeurotechClient.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", content = { @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "409", content = { @Content(schema = @Schema()) }) })
     public ResponseEntity<Object> registerNeurotechClient(
             @Valid @RequestBody NeurotechClientRegisterDto neurotechClientRegisterDto) {
 
@@ -50,12 +63,22 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+            summary = "Retrieves a NeurotechClient by id is exists.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = NeurotechClientRegisterDto.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }) })
     public ResponseEntity<NeurotechClient> getNeurotechClientById(@PathVariable String id) {
 
         return ResponseEntity.ok(clientService.get(id));
     }
 
     @GetMapping("/{id}/check-credit-availability/{vehicleModel}")
+    @Operation(
+            summary = "Checks if a given NeurotechClient has credit availability for a vehicle model.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = CreditAvailabilityStatusDto.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }) })
     public ResponseEntity<CreditAvailabilityStatusDto> checkCreditAvailability(
             @PathVariable String id, @PathVariable String vehicleModel) {
 
@@ -72,6 +95,11 @@ public class ClientController {
     }
 
     @GetMapping("/eligible-clients/")
+    @Operation(
+            summary = "List all the eligible NeurotechClient that has credit availability based on the query filters provided.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", content = { @Content(array = @ArraySchema(schema = @Schema(implementation = EligibleNeurotechClientDto.class)), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "404", content = { @Content(schema = @Schema()) }) })
     public ResponseEntity<Set<EligibleNeurotechClientDto>> getEligibleNeurotechClients(
             @RequestParam(required = false) Integer ageMin,
             @RequestParam(required = false) Integer ageMax,
