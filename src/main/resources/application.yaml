@@ -3,7 +3,7 @@ spring:
     name: challenge-java-developer
 
   datasource:
-    url: jdbc:mysql://localhost:3306/neurotech
+    url: jdbc:mysql://localhost:3306/neurotech-client
     username: root
     password: root
   jpa:
