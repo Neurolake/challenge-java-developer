@@ -25,8 +25,8 @@
 	<contributors>
 		<contributor>
 			<!-- Preencha com seus próprios dados quando fizer o fork -->
-			<name>Nome do candidato</name>
-			<email>email@candidato.com</email>
+			<name>Francisco das Chagas Costa da Silva</name>
+			<email>francyscocosta@gmail.com</email>
 		</contributor>
 	</contributors>
 
@@ -53,6 +53,13 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+		<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
 	</dependencies>
 
 	<build>
