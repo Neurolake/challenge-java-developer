@@ -1,6 +1,8 @@
 package br.com.neurotech.challenge.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,6 +26,11 @@ public class InMemoryClientRepository implements ClientRepository {
     @Override
     public Optional<NeurotechClient> findById(String id) {
         return Optional.ofNullable(database.get(id));
+    }
+
+    @Override
+    public List<NeurotechClient> findAll() {
+        return new ArrayList<>(database.values());
     }
 
 }

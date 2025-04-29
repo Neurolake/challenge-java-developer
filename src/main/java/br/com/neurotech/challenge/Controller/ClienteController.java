@@ -1,6 +1,7 @@
 package br.com.neurotech.challenge.Controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,6 +59,12 @@ public class ClienteController {
         }
         boolean isEligible = creditService.checkCredit(id, vehicleModel);
         return ResponseEntity.ok(isEligible);
+    }
+
+    @GetMapping("/special")
+    public ResponseEntity<List<ClientResponseDTO>> listSpecialClients() {
+        List<ClientResponseDTO> specialClients = clientService.findSpecialClients();
+        return ResponseEntity.ok(specialClients);
     }
 
 }

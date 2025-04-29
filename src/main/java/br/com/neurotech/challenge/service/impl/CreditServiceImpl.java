@@ -1,10 +1,13 @@
 package br.com.neurotech.challenge.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
 
+@Service
 public class CreditServiceImpl implements CreditService {
     private final ClientService clientService;
 
