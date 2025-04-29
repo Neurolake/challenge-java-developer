@@ -37,7 +37,7 @@ public class ClienteController {
     public ResponseEntity<Void> createClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         NeurotechClient client = ClientMapper.toEntity(clientRequestDTO);
         String id = clientService.save(client);
-        URI lication = URI.create("api/client/" + id);
+        URI lication = URI.create("/api/client/" + id);
         return ResponseEntity.created(lication).build();
     }
 
