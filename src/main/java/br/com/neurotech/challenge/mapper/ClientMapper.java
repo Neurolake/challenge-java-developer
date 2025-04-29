@@ -9,7 +9,11 @@ public class ClientMapper {
     }
 
     public static NeurotechClient toEntity(ClientRequestDTO dto) {
-        return new NeurotechClient(dto.getName(), dto.getAge(), dto.getIncome());
+        NeurotechClient client = new NeurotechClient();
+        client.setName(dto.getName());
+        client.setAge(dto.getAge());
+        client.setIncome(dto.getIncome());
+        return client;
     }
 
 }

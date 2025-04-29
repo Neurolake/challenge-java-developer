@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class ClientRequestDTO {
 
-    @NotBlank(message = "O mome é obrigatório")
+    @NotBlank(message = "O nome é obrigatório")
     private String name;
 
     @NotNull(message = "A idade é obrigatória")
