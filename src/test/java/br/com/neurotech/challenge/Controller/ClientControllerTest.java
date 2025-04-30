@@ -2,6 +2,7 @@ package br.com.neurotech.challenge.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.neurotech.challenge.DTO.ClientRequestDTO;
+import br.com.neurotech.challenge.DTO.ClientResponseDTO;
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
 
@@ -18,6 +19,8 @@ import br.com.neurotech.challenge.service.CreditService;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 @WebMvcTest(ClientController.class)
 public class ClientControllerTest {
@@ -175,4 +178,29 @@ public class ClientControllerTest {
         mockMvc.perform(get("/api/client/" + clientId + "/credit"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldReturnSpecialClientsList() throws Exception {
+        List<ClientResponseDTO> specialClients = List.of(
+                new ClientResponseDTO("Laura", 24, 9000.0),
+                new ClientResponseDTO("André", 25, 14000.0));
+
+        Mockito.when(clientService.findSpecialClients()).thenReturn(specialClients);
+
+        mockMvc.perform(get("/api/client/special"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].fullName").value("Laura"))
+                .andExpect(jsonPath("$[1].income").value(14000.0));
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoSpecialClientsFound() throws Exception {
+        Mockito.when(clientService.findSpecialClients()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/client/special"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("[]"));
+    }
+
 }
