@@ -1,0 +1,88 @@
+package br.com.neurotech.challenge.Controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import br.com.neurotech.challenge.DTO.ClientRequestDTO;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import br.com.neurotech.challenge.service.ClientService;
+import br.com.neurotech.challenge.service.CreditService;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(ClientController.class)
+public class ClientControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private ClientService clientService;
+
+    @MockBean
+    private CreditService creditService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Test
+    void mustRegisterCustomerAndReturnCreatedWithLocation() throws Exception {
+        ClientRequestDTO dto = new ClientRequestDTO();
+        dto.setFullName("Maria Silva");
+        dto.setAge(30);
+        dto.setIncome(8000.00);
+
+        String fakeId = "abc-123";
+        org.mockito.Mockito.when(clientService.save(org.mockito.ArgumentMatchers.any()))
+                .thenReturn(fakeId);
+
+        mockMvc.perform(post("/api/client")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/api/client/" + fakeId));
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenAgeIsLessThan18() throws Exception {
+        ClientRequestDTO dto = new ClientRequestDTO();
+        dto.setFullName("João Menor");
+        dto.setAge(17);
+        dto.setIncome(8000.0);
+
+        mockMvc.perform(post("/api/client")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenFullNameIsBlank() throws Exception {
+        ClientRequestDTO dto = new ClientRequestDTO();
+        dto.setFullName("");
+        dto.setAge(30);
+        dto.setIncome(8000.0);
+
+        mockMvc.perform(post("/api/client")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenIncomeIsNegative() throws Exception {
+        ClientRequestDTO dto = new ClientRequestDTO();
+        dto.setFullName("Carlos Renda Negativa");
+        dto.setAge(30);
+        dto.setIncome(-1000.0);
+
+        mockMvc.perform(post("/api/client")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+}

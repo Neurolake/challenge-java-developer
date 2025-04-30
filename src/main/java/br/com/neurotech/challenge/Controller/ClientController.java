@@ -24,12 +24,12 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/client")
-public class ClienteController {
+public class ClientController {
 
     private final ClientService clientService;
     private final CreditService creditService;
 
-    public ClienteController(ClientService clientService, CreditService creditService) {
+    public ClientController(ClientService clientService, CreditService creditService) {
         this.clientService = clientService;
         this.creditService = creditService;
     }
@@ -71,5 +71,4 @@ public class ClienteController {
         List<ClientResponseDTO> specialClients = clientService.findSpecialClients();
         return ResponseEntity.ok(specialClients);
     }
-
 }
