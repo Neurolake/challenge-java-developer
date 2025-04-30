@@ -16,6 +16,7 @@ import br.com.neurotech.challenge.DTO.ClientRequestDTO;
 import br.com.neurotech.challenge.DTO.ClientResponseDTO;
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
+import br.com.neurotech.challenge.exception.ClientNotFoundException;
 import br.com.neurotech.challenge.mapper.ClientMapper;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
@@ -48,7 +49,7 @@ public class ClientController {
     public ResponseEntity<ClientResponseDTO> getClient(@PathVariable String id) {
         NeurotechClient client = clientService.get(id);
         if (client == null) {
-            return ResponseEntity.notFound().build();
+            throw new ClientNotFoundException(id);
         }
         ClientResponseDTO responseDTO = new ClientResponseDTO(client.getName(), client.getAge(), client.getIncome());
         return ResponseEntity.ok(responseDTO);
@@ -59,7 +60,7 @@ public class ClientController {
     public ResponseEntity<Boolean> checkCredit(@PathVariable String id, @RequestParam VehicleModel vehicleModel) {
         NeurotechClient client = clientService.get(id);
         if (client == null) {
-            return ResponseEntity.notFound().build();
+            throw new ClientNotFoundException(id);
         }
         boolean isEligible = creditService.checkCredit(id, vehicleModel);
         return ResponseEntity.ok(isEligible);
