@@ -32,6 +32,14 @@ public class InMemoryClientRepositoryTest {
         assertTrue(result.isEmpty());
     }
 
+    @Test
+    void shouldReturnAllClients() {
+        repository.save(createClient("Laura", 28, 7000.0));
+        repository.save(createClient("Carlos", 35, 8000.0));
+
+        assertEquals(2, repository.findAll().size());
+    }
+
     private NeurotechClient createClient(String name, int age, double income) {
         NeurotechClient client = new NeurotechClient();
         client.setName(name);
