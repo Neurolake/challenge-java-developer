@@ -19,6 +19,7 @@ import br.com.neurotech.challenge.entity.VehicleModel;
 import br.com.neurotech.challenge.mapper.ClientMapper;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,6 +34,7 @@ public class ClienteController {
         this.creditService = creditService;
     }
 
+    @Operation(summary = "Cadastrar novo cliente", description = "Cria um cliente e retorna o Location com o ID")
     @PostMapping
     public ResponseEntity<Void> createClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         NeurotechClient client = ClientMapper.toEntity(clientRequestDTO);
@@ -41,6 +43,7 @@ public class ClienteController {
         return ResponseEntity.created(lication).build();
     }
 
+    @Operation(summary = "Buscar cliente", description = "Busca o clinete por id")
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> getClient(@PathVariable String id) {
         NeurotechClient client = clientService.get(id);
@@ -51,6 +54,7 @@ public class ClienteController {
         return ResponseEntity.ok(responseDTO);
     }
 
+    @Operation(summary = "Verifca crédito", description = "Verifica credito pelo id do usuário")
     @GetMapping("{id}/credit")
     public ResponseEntity<Boolean> checkCredit(@PathVariable String id, @RequestParam VehicleModel vehicleModel) {
         NeurotechClient client = clientService.get(id);
@@ -61,6 +65,7 @@ public class ClienteController {
         return ResponseEntity.ok(isEligible);
     }
 
+    @Operation(summary = "Lista clientes", description = "Filtra os clientes especiais")
     @GetMapping("/special")
     public ResponseEntity<List<ClientResponseDTO>> listSpecialClients() {
         List<ClientResponseDTO> specialClients = clientService.findSpecialClients();
