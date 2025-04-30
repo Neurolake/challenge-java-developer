@@ -3,8 +3,10 @@ package br.com.neurotech.challenge.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.neurotech.challenge.DTO.ClientRequestDTO;
 import br.com.neurotech.challenge.entity.NeurotechClient;
+import br.com.neurotech.challenge.entity.VehicleModel;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -114,5 +116,63 @@ public class ClientControllerTest {
 
         mockMvc.perform(get("/api/client/" + clientId))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnTrueWhenClientIsEligibleForHatchCredit() throws Exception {
+        String clientId = "1234";
+        NeurotechClient client = new NeurotechClient();
+        client.setName("Maria Silva");
+        client.setAge(30);
+        client.setIncome(8000.0);
+        Mockito.when(clientService.get(clientId)).thenReturn(client);
+
+        Mockito.when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(true);
+
+        mockMvc.perform(get("/api/client/" + clientId + "/credit")
+                .param("vehicleModel", "HATCH"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
+
+    @Test
+    void shouldReturnFalseWhenClientIsNotEligibleForHatchCredit() throws Exception {
+        String clientId = "1234";
+        NeurotechClient client = new NeurotechClient();
+        client.setName("Maria Silva");
+        client.setAge(30);
+        client.setIncome(8000.0);
+        Mockito.when(clientService.get(clientId)).thenReturn(client);
+
+        Mockito.when(creditService.checkCredit(clientId, VehicleModel.HATCH)).thenReturn(false);
+
+        mockMvc.perform(get("/api/client/" + clientId + "/credit")
+                .param("vehicleModel", "HATCH"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("false"));
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenCreditClientDoesNotExist() throws Exception {
+        String clientId = "9999";
+        Mockito.when(clientService.get(clientId)).thenReturn(null);
+
+        mockMvc.perform(get("/api/client/" + clientId + "/credit")
+                .param("vehicleModel", "SUV"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenVehicleModelIsMissing() throws Exception {
+        String clientId = "1234";
+        NeurotechClient client = new NeurotechClient();
+        client.setName("Maria Silva");
+        client.setAge(30);
+        client.setIncome(8000.0);
+
+        Mockito.when(clientService.get(clientId)).thenReturn(client);
+
+        mockMvc.perform(get("/api/client/" + clientId + "/credit"))
+                .andExpect(status().isBadRequest());
     }
 }
