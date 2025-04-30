@@ -2,6 +2,8 @@ package br.com.neurotech.challenge.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import br.com.neurotech.challenge.DTO.ClientRequestDTO;
+import br.com.neurotech.challenge.entity.NeurotechClient;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +14,7 @@ import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ClientController.class)
@@ -84,5 +87,32 @@ public class ClientControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldReturnClientDataWhenClientExists() throws Exception {
+        String clientId = "1234";
+        NeurotechClient client = new NeurotechClient();
+        client.setName("Maria Silva");
+        client.setAge(30);
+        client.setIncome(8000.0);
+
+        org.mockito.Mockito.when(clientService.get(clientId)).thenReturn(client);
+
+        mockMvc.perform(get("/api/client/" + clientId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.fullName").value("Maria Silva"))
+                .andExpect(jsonPath("$.age").value(30))
+                .andExpect(jsonPath("$.income").value(8000.0));
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenClientDoesNotExist() throws Exception {
+        String clientId = "9999";
+
+        org.mockito.Mockito.when(clientService.get(clientId)).thenReturn(null);
+
+        mockMvc.perform(get("/api/client/" + clientId))
+                .andExpect(status().isNotFound());
     }
 }
