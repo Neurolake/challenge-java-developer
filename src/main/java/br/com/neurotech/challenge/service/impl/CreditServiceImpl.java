@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
+import br.com.neurotech.challenge.exception.ClientNotFoundException;
 import br.com.neurotech.challenge.service.ClientService;
 import br.com.neurotech.challenge.service.CreditService;
 
@@ -20,7 +21,7 @@ public class CreditServiceImpl implements CreditService {
         NeurotechClient client = clientService.get(clientId);
 
         if (client == null) {
-            throw new IllegalArgumentException("Cliente não encontrado");
+            throw new ClientNotFoundException(clientId);
         }
 
         if (model == VehicleModel.HATCH) {

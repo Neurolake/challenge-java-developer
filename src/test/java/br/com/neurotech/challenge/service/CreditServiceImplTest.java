@@ -2,6 +2,7 @@ package br.com.neurotech.challenge.service;
 
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
+import br.com.neurotech.challenge.exception.ClientNotFoundException;
 import br.com.neurotech.challenge.service.impl.CreditServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,7 +66,7 @@ class CreditServiceImplTest {
         String id = "missing";
         when(clientService.get(id)).thenReturn(null);
 
-        assertThrows(IllegalArgumentException.class, () -> creditService.checkCredit(id, VehicleModel.HATCH));
+        assertThrows(ClientNotFoundException.class, () -> creditService.checkCredit(id, VehicleModel.HATCH));
     }
 
     private NeurotechClient createClient(int age, double income) {

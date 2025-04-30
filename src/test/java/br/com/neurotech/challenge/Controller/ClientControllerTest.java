@@ -5,6 +5,7 @@ import br.com.neurotech.challenge.DTO.ClientRequestDTO;
 import br.com.neurotech.challenge.DTO.ClientResponseDTO;
 import br.com.neurotech.challenge.entity.NeurotechClient;
 import br.com.neurotech.challenge.entity.VehicleModel;
+import br.com.neurotech.challenge.exception.ClientNotFoundException;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -115,7 +116,7 @@ public class ClientControllerTest {
     void shouldReturnNotFoundWhenClientDoesNotExist() throws Exception {
         String clientId = "9999";
 
-        org.mockito.Mockito.when(clientService.get(clientId)).thenReturn(null);
+        org.mockito.Mockito.when(clientService.get(clientId)).thenThrow(new ClientNotFoundException(clientId));
 
         mockMvc.perform(get("/api/client/" + clientId))
                 .andExpect(status().isNotFound());
@@ -158,7 +159,7 @@ public class ClientControllerTest {
     @Test
     void shouldReturnNotFoundWhenCreditClientDoesNotExist() throws Exception {
         String clientId = "9999";
-        Mockito.when(clientService.get(clientId)).thenReturn(null);
+        Mockito.when(clientService.get(clientId)).thenThrow(new ClientNotFoundException(clientId));
 
         mockMvc.perform(get("/api/client/" + clientId + "/credit")
                 .param("vehicleModel", "SUV"))
