@@ -69,6 +69,26 @@ class CreditServiceImplTest {
         assertThrows(ClientNotFoundException.class, () -> creditService.checkCredit(id, VehicleModel.HATCH));
     }
 
+    @Test
+    void shouldReturnFalseForHatchWhenIncomeIsTooHigh() {
+        String id = "hatch-high";
+        NeurotechClient client = createClient(30, 16000.0);
+        when(clientService.get(id)).thenReturn(client);
+
+        boolean eligible = creditService.checkCredit(id, VehicleModel.HATCH);
+        assertFalse(eligible);
+    }
+
+    @Test
+    void shouldReturnFalseForSuvWhenIncomeIsTooLow() {
+        String id = "suv-low-income";
+        NeurotechClient client = createClient(30, 7000.0);
+        when(clientService.get(id)).thenReturn(client);
+
+        boolean eligible = creditService.checkCredit(id, VehicleModel.SUV);
+        assertFalse(eligible);
+    }
+
     private NeurotechClient createClient(int age, double income) {
         NeurotechClient client = new NeurotechClient();
         client.setAge(age);

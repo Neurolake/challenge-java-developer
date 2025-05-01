@@ -33,7 +33,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public List<ClientResponseDTO> findSpecialClients() {
         return clientRepository.findAll().stream()
-                .filter(client -> client.getAge() >= 23 && client.getAge() <= 25)
+                .filter(client -> client.getAge() >= 23 && client.getAge() <= 49)
+                .filter(client -> client.getAge() >= 18 && client.getAge() <= 25)
                 .filter(client -> client.getIncome() >= 5000 && client.getIncome() <= 15000)
                 .map(client -> new ClientResponseDTO(client.getName(), client.getAge(), client.getIncome()))
                 .toList();

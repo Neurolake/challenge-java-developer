@@ -24,12 +24,9 @@ public class CreditServiceImpl implements CreditService {
             throw new ClientNotFoundException(clientId);
         }
 
-        if (model == VehicleModel.HATCH) {
-            return client.getIncome() >= 5000 && client.getIncome() <= 15000;
-        } else if (model == VehicleModel.SUV) {
-            return client.getIncome() > 8000 && client.getAge() > 20;
-        }
-
-        return false;
+        return switch (model) {
+            case HATCH -> client.getIncome() >= 5000 && client.getIncome() <= 15000;
+            case SUV -> client.getIncome() > 8000 && client.getAge() > 20;
+        };
     }
 }

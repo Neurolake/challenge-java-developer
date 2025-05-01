@@ -1,8 +1,10 @@
 package br.com.neurotech.challenge.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class NeurotechClient {
 
 	private String name;

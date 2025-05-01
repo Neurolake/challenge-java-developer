@@ -4,15 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Schema(description = "DTO de entrada para cadastro de cliente")
-@Data
+@Getter
+@Setter
 public class ClientRequestDTO {
 
     @Schema(description = "Nome completo do cliente", example = "Maria Silva")
     @NotBlank(message = "O nome é obrigatório")
-    private String fullName;
+    private String name;
 
     @Schema(description = "Idade do cliente", example = "30", minimum = "18")
     @NotNull(message = "A idade é obrigatória")

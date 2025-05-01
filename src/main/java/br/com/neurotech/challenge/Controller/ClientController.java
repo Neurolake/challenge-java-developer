@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.neurotech.challenge.DTO.ClientRequestDTO;
 import br.com.neurotech.challenge.DTO.ClientResponseDTO;
@@ -40,8 +41,14 @@ public class ClientController {
     public ResponseEntity<Void> createClient(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
         NeurotechClient client = ClientMapper.toEntity(clientRequestDTO);
         String id = clientService.save(client);
-        URI lication = URI.create("/api/client/" + id);
-        return ResponseEntity.created(lication).build();
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(id)
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @Operation(summary = "Buscar cliente", description = "Busca o clinete por id")
@@ -51,7 +58,7 @@ public class ClientController {
         if (client == null) {
             throw new ClientNotFoundException(id);
         }
-        ClientResponseDTO responseDTO = new ClientResponseDTO(client.getName(), client.getAge(), client.getIncome());
+        ClientResponseDTO responseDTO = ClientMapper.toResponseDTO(client);
         return ResponseEntity.ok(responseDTO);
     }
 
