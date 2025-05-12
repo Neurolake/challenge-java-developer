@@ -25,8 +25,8 @@
 	<contributors>
 		<contributor>
 			<!-- Preencha com seus próprios dados quando fizer o fork -->
-			<name>Nome do candidato</name>
-			<email>email@candidato.com</email>
+			<name>`Franklim Recelly Tavares Mendes`</name>
+			<email>franklim.r.mendes@gmail.com</email>
 		</contributor>
 	</contributors>
 
@@ -51,6 +51,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
